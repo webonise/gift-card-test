@@ -144,10 +144,6 @@
                 <?php /* Extensions placeholder */ ?>
                 <?php echo $this->getChildHtml('checkout.cart.extra') ?>
                 <?php echo $this->getChildHtml('coupon') ?>
-<<<<<<< HEAD
-                <?php $this->getChildHtml('giftcards') ?>
-=======
->>>>>>> 9716da6b3a93e99d24bbc636ce69de6ee8e48ac7
                 <?php if (!$this->getIsVirtual()): echo $this->getChildHtml('shipping'); endif; ?>
             </div>
         </div>

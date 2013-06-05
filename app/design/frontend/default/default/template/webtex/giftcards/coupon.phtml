@@ -1,0 +1,39 @@
+<?php $oGiftCardSession = Mage::getSingleton('giftcards/session'); ?>
+
+<div class="discount">
+    <h2><?php echo $this->__('Gift Gards'); ?></h2>
+
+    <div class="discount-form">
+        <form method="post" action="<?php echo $this->getUrl('giftcards/cart/activateGiftCard'); ?>" id="activateGiftCard">
+            <label for="giftcard_code"><?php echo $this->__('Redeem and use your Gift Card now:'); ?></label>
+            <div class="input-box">
+                <input value="" name="giftcard_code" id="giftcard_code" class="input-text">
+            </div>
+            <div class="buttons-set">
+                <button value="<?php echo $this->__('Activate') ?>" onclick="giftCardForm.submit(true)" class="button"
+                        title="Activate" type="button"><span><span><?php echo $this->__('Activate') ?></span></span>
+                </button>
+            </div>
+        </form>
+
+        <?php $currencySymbol = Mage::app()->getLocale()->currency(Mage::app()->getStore()->getCurrentCurrencyCode())->getSymbol(); $temp = 0; ?>
+        <?php if($oGiftCardSession->getActive())
+                    foreach($oGiftCardSession->getFrontOptions() as $k => $v)
+                    {
+                        if($temp) {
+                            echo '<br/><br/>';
+                        }
+                        echo '<b>'.$currencySymbol.$v['applied'].$this->__('applied from Gift Card').' **********'.$v['code'].'.</b><br/>';
+                        echo $this->__('Remaining card balance').': '.$currencySymbol.$v['remaining'].'. (<a href="'.$this->getUrl("giftcards/cart/deActivateGiftCard/id/$k").'">'.$this->__('Remove').'</a>)';
+                        $temp = 1;
+                    }
+        ?>
+    </div>
+    <script type="text/javascript">
+        //&lt;![CDATA[
+        var deActivateGiftCardForm = new VarienForm('deActivateGiftCard');
+        var giftCardForm = new VarienForm('activateGiftCard');
+        //]]&gt;
+    </script>
+
+</div>
