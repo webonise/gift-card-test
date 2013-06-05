@@ -1,0 +1,43 @@
+<?php $oGiftCardSession = Mage::getSingleton('giftcards/session'); ?>
+
+<div class="discount">
+    <div class="sp-methods">
+        <form method="post" action="<?php echo $this->getUrl('giftcards/cart/giftcardActive'); ?>" id="giftcardAgree">
+            <div class="input-box">
+                <input type="checkbox" value="1" name="giftcard_use" id="giftcard_use" class="checkbox" onclick="agreeMethod.save();" <?php echo $oGiftCardSession->getActive() ? 'checked="checked"' : '' ?>>
+                <label for="giftcard_use"><?php echo $this->__('Gift Card'); ?></label>
+            </div>
+        </form>
+    </div>
+    <?php if($oGiftCardSession->getActive()): ?>
+    <div class="discount-form giftcard-payment-method">
+        <form method="post" action="<?php echo $this->getUrl('giftcards/cart/activateGiftCard'); ?>" id="activateGiftCard">
+            <label for="giftcard_code"><?php echo $this->__('Redeem and use your Gift Card now:'); ?></label>
+            <div class="input-box">
+                <input value="" name="giftcard_code" id="giftcard_code" class="input-text">
+            </div>
+            <div class="buttons-set">
+                <button value="<?php echo $this->__('Apply') ?>" onclick="activateGiftCard.save()" class="button"
+                        title="Apply" type="button" style="float: left;"><span><span><?php echo $this->__('Apply') ?></span></span>
+                </button>
+            </div>
+        </form>
+
+        <?php $currencySymbol = Mage::app()->getLocale()->currency(Mage::app()->getStore()->getCurrentCurrencyCode())->getSymbol(); $temp = 0; ?>
+        <?php if($oGiftCardSession->getActive()) {
+            foreach($oGiftCardSession->getFrontOptions() as $k => $v)
+            {
+                if($temp) {
+                    echo '<br/><br/>';
+                }
+                echo '<b>'.$currencySymbol.$v['applied'].$this->__('applied from Gift Card').' **********'.$v['code'].'.</b><br/>';
+                echo $this->__('Remaining card balance').': '.$currencySymbol.$v['remaining'].'. (<a href="#" onclick="deActivateGiftCard.deactivate('.$k.');">'.$this->__('Remove').'</a>)';
+                $temp = 1;
+            }
+        }
+        ?>
+    </div>
+
+    <?php endif;?>
+
+</div>

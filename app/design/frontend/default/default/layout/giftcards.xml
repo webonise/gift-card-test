@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<layout>
+    <default>
+        <reference name="head">
+            <action method="addCss">
+                <stylesheet>css/webtexgiftcards.css</stylesheet>
+            </action>
+            <action method="addItem"><type>js_css</type><name>calendar/calendar-win2k-1.css</name><params/></action>
+            <action method="addItem"><type>js</type><name>calendar/calendar.js</name></action>
+            <action method="addItem"><type>js</type><name>calendar/calendar-setup.js</name></action>
+            <block type="core/html_calendar" name="head.calendar" as="calendar" template="page/js/calendar.phtml"/>
+        </reference>
+    </default>
+    <PRODUCT_TYPE_giftcards>
+        <reference name="product.info">
+            <block type="giftcards/product_type" name="product.info.giftcards" as="product_type_data" template="webtex/giftcards/product/type.phtml"/>
+
+        </reference>
+    </PRODUCT_TYPE_giftcards>
+
+    <customer_giftcards_print>
+        <reference name="content">
+            <block type="giftcards/print" name="card_print" template="webtex/giftcards/print.phtml"/>
+        </reference>
+    </customer_giftcards_print>
+
+    <checkout_cart_index>
+        <reference name="checkout.cart">
+            <action method="addItemRender"><type>giftcards</type><block>checkout/cart_item_renderer</block><template>webtex/giftcards/cart_item.phtml</template></action>
+            <block type="giftcards/coupon" after="coupon" name="checkout.cart.giftcards" as="giftcards" template="webtex/giftcards/coupon.phtml"/>
+        </reference>
+    </checkout_cart_index>
+
+    <checkout_onepage_index>
+        <reference name="checkout.onepage.payment">
+            <block type="giftcards/coupon" name="onepage.giftcard" as="onepagegiftcard" template="webtex/giftcards/checkout/onepage/coupon.phtml" />
+        </reference>
+    </checkout_onepage_index>
+
+    <giftcard_onepage_coupon>
+        <remove name="right"/>
+        <remove name="left"/>
+
+        <block type="giftcards/coupon" name="gc" output="toHtml" template="webtex/giftcards/checkout/onepage/coupon.phtml" />
+    </giftcard_onepage_coupon>
+</layout>

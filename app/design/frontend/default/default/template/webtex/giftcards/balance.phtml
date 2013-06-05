@@ -1,0 +1,18 @@
+<div class="page-title">
+    <h1><?php echo $this->__('My Gift Cards') ?></h1>
+</div>
+<form name="giftcardForm" action="<?php echo $this->getUrl('customer/giftcards/apply') ?>" method="post">
+<table border="0" cellpadding="1" cellspacing="1">
+  <tr>
+    <td><?php echo $this->__('My Gift Card balance') ?>:</td>
+    <td><?php echo Mage::helper('core')->currency($this->getCurrentBalance()); ?></td>
+  </tr>
+  <tr>
+    <td><?php echo $this->__('Enter the Gift Card code') ?>:</td>
+    <td><input class="input-text" id="giftcard_code" name="giftcard_code" value="" /></td>
+  </tr>
+  <tr>
+    <td colspan="2" align="center"><button type="button" title="<?php echo $this->__('Redeem') ?>" class="button" onclick="document.forms['giftcardForm'].submit()" value="<?php echo $this->__('Redeem') ?>"><span><span><?php echo $this->__('Redeem') ?></span></span></button></td>
+  </tr>
+</table>
+</form>

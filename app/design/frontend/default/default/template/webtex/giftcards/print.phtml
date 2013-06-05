@@ -1,0 +1,75 @@
+<?php $giftCard = $this->getGiftcard(); ?>
+<?php if ($giftCard) : ?>
+<table bgcolor="#FFFFFF" cellspacing="0" cellpadding="10" border="0" width="650" style="border:1px solid #E0E0E0;">
+    <tr>
+        <td valign="top" style="padding: 10px;">
+            <h1 style="font-size:22px; font-weight:normal; line-height:22px; margin:0 0 11px 0;">Hello<?php if ($giftCard->getMailTo()) : ?>, <?php echo $this->helper('core')->escapeHtml($giftCard->getMailTo(), null);?><?php endif; ?>!</h1>
+            <p style="font-size:12px; line-height:16px; margin:0;">You have received a <?php echo Mage::helper('core')->currency($giftCard->getCardAmount(), true, false)?> Gift Card<?php if ($giftCard->getMailFrom()) : ?> from <?php echo $this->helper('core')->escapeHtml($giftCard->getMailFrom(), null);?><?php endif; ?>! This card may be redeemed on <a href="<?php echo Mage::app()->getStore()->getBaseUrl(); ?>"><?php echo Mage::app()->getStore()->getFrontendName(); ?></a> website. Happy shopping!</p>
+        </td>
+    </tr>
+    <tr>
+        <td align="center" style="text-align: center;padding: 10px;">
+<?php
+        if(Mage::helper('giftcards')->isUseDefaultPicture()) {
+          $picture = $this->getSkinUrl('images/giftcard.png');
+        } else {
+          $order = Mage::getModel('sales/order')->load($giftCard->getOrderId());
+          if($order->getId()) {
+              foreach($order->getAllItems() as $item){
+                 if($item->getProductType() == 'giftcards') {
+                     $product = Mage::getModel('catalog/product')->load($item->getProductId());
+                     $picture = Mage::helper('catalog/image')->init($product, 'image');
+                 }
+              }
+          } else {
+              $picture = $this->getSkinUrl('images/giftcard.png');
+          }
+        }
+?>
+            <img src="<?php echo $picture; ?>" />
+            <!--<img src="<?php echo $this->getSkinUrl('images/giftcard.png'); ?>" />-->
+        </td>
+    </tr>
+    <tr>
+        <td style="font-size:20px; line-height:30px; margin:0;padding: 10px;">
+            <?php if ($giftCard->getMailTo()) : ?>to: <?php echo $this->helper('core')->escapeHtml($giftCard->getMailTo(), null);?><br/><?php endif; ?>
+            <?php if ($giftCard->getMailFrom()) : ?>from: <?php echo $this->helper('core')->escapeHtml($giftCard->getMailFrom(), null);?><br/><?php endif; ?>
+            <?php if ($giftCard->getMailMessage()) : ?>message: <?php echo $this->helper('core')->escapeHtml($giftCard->getMailMessage(), null);?><br/><?php endif; ?>
+            Gift Card value: <?php echo Mage::helper('core')->currency($giftCard->getCardAmount(), true, false)?><br />
+            Gift Card claim code: <?php echo $giftCard->getCardCode();?><br />
+        </td>
+    </tr>
+    <tr>
+        <td bgcolor="#EAEAEA" align="left" style="background:#EAEAEA; text-align:left;padding: 10px;">
+            <p style="font-size:12px; margin:0;line-height:20px;">To redeem and use you gift card:
+                <ul style="font-size:12px; margin-left: 40px;line-height:20px;list-style-type: decimal;">
+                    <li>Create an account and login into <a href="<?php echo Mage::app()->getStore()->getBaseUrl(); ?>"><?php echo Mage::app()->getStore()->getBaseUrl(); ?></a>.</li>
+                    <li>Redeem the card in My Gift Cards page of My Account section..</li>
+                    <li>Alternatively, you can redeem the card on My Cart page before proceeding to checkout.</li>
+                </ul>
+            </p>
+        </td>
+    </tr>
+    <tr>
+        <td bgcolor="#EAEAEA" align="left" style="background:#EAEAEA; text-align:left;padding: 10px;">
+            <p style="font-size:12px; margin:0;">If you have any questions please contact us at <a href="mailto:<?php echo Mage::getStoreConfig('trans_email/ident_support/email') ?>" style="color:#1E7EC8;"><?php echo Mage::getStoreConfig('trans_email/ident_support/email') ?></a></p>
+        </td>
+    </tr>
+</table>
+<script language="JavaScript" type="text/javascript">
+window.print();
+</script>
+<?php else : ?>
+<table bgcolor="#FFFFFF" cellspacing="0" cellpadding="10" border="0" width="650" style="border:1px solid #E0E0E0;">
+    <tr>
+        <td bgcolor="#EAEAEA" align="left" style="background:#EAEAEA; text-align:left;padding: 10px;">
+            <p style="font-size:12px; margin:0;line-height:20px;">Sorry but such card does not exists.
+                <ul style="font-size:12px; margin-left: 40px;line-height:20px;list-style-type: decimal;">
+                    <li>Maybe already activated?</li>
+                    <li>Or maybe it was bought not by you?</li>
+                </ul>
+            </p>
+        </td>
+    </tr>
+</table>
+<?php endif; ?>

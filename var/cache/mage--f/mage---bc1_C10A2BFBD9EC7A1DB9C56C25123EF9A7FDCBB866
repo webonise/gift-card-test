@@ -1,0 +1,29 @@
+
+<div class="mainFooter">
+    <div class="container">
+        <div class="footer-container row">
+            <div class="footer span8">
+                <div class="fLinks"><ul>
+<li><a href="http://localhost/projects/magento_new/index.php/about-magento-demo-store?___SID=U">About Us</a></li>
+<li><a href="http://localhost/projects/magento_new/index.php/customer-service?___SID=U">Customer Service</a></li>
+<li class="last privacy"><a href="http://localhost/projects/magento_new/index.php/privacy-policy-cookie-restriction-mode?___SID=U">Privacy Policy</a></li>
+</ul></div>
+                <div class="lCopy"><address>&copy; 2012 Magento Demo Store. All Rights Reserved.</address></div>
+                <ul class="footBotMenu clearfix">
+                    <li><a href="/terms-of-services">Terms of services</a> </li>
+
+                    <li><a href="/privacy-policy">Privacy policy</a> </li>
+                    <li><a href="/site-map">Site map</a> </li>
+                </ul>
+
+            </div>
+            <ul class="socialMenu clearfix span3">
+<!--                <li><a href="#" class="gplus"></a> </li>-->
+                <li><a href="http://pinterest.com/needlepoint_com/" class="pinterest" target="_blank"></a> </li>
+                <li><a href="https://twitter.com/needlepoint" target="_blank" class="twit"></a> </li>
+                <li><a href="https://www.facebook.com/NeedlepointCom?fref=ts" target="_blank"></a> </li>
+            </ul>
+        </div>
+    </div>
+</div>
+

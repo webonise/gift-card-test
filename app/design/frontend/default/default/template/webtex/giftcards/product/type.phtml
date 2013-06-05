@@ -1,0 +1,114 @@
+<?php
+$_product = $this->getProduct();
+$_currency = Mage::app()->getStore()->getCurrentCurrency();
+$_from = Mage::getStoreConfig('giftcards/default/min_card_value') ? Mage::getStoreConfig('giftcards/default/min_card_value') : 0;;
+$_to = Mage::getStoreConfig('giftcards/default/max_card_value') ? Mage::getStoreConfig('giftcards/default/max_card_value') : 0;;
+?>
+<script type="text/javascript">
+    Validation.add('validate-float-range', "The value is not within the specified range.", function(v, element) {
+        var result = Validation.get('IsEmpty').test(v) || !/[^\d\.\,]/.test(v);
+        var reRange = new RegExp(/^float-range-[\d\.\,]+-[\d\.\,]+$/);
+        $w(element.className).each(function(name, index) {
+            if (name.match(reRange) && result) {
+                var min = parseFloat(name.split('-')[2]);
+                var max = parseFloat(name.split('-')[3]);
+                var val = parseFloat(v);
+                result = !((v < min && min > 0) || (v > max && max > 0));
+            }
+        });
+        return result;
+    });
+</script>
+<div class="giftcard-info">
+    <fieldset id="giftcard-fieldset" class="giftcard-fieldset">
+        <?php if ($this->getPriceStatus() == 1) : ?>
+        <div class="field ">
+            <label for="card-amount" class="required"><?php echo $this->__('Amount') ?><em>*</em>:</label><br/>
+            <input style="width:100px;" type="text" id="card-amount" name="card_amount" class="input-text required-entry validate-float-range float-range-<?php echo $_from;?>-<?php echo $_to;?>"/>&nbsp;(<?php echo $_currency->format($_from) ?> - <?php echo $_currency->format($_to) ?>)
+        </div>
+        <?php elseif($this->getPriceStatus() == 2) : ?>
+        <br/>
+        <label for="card-amount" class="required"><?php echo $this->__('Select amount') ?><em>*</em>:</label><br/>
+        <select id="card-amount" name="card_amount" class="validate-select" style="width:207px;">
+            <?php foreach($this->aAdditionalPrices as $additionalPrice) : ?>
+            <option value="<?php echo $additionalPrice;?>"><?php echo $_currency->format($additionalPrice);?></option>
+            <?php endforeach; ?>
+        </select>
+        <?php else: ?>
+        <?php echo $this->getPriceHtml($_product) ?>
+        <?php endif; ?>
+        <div class="field">
+            <label for="mail-from"><?php echo $this->__('From Name') ?>:</label><br/>
+            <input style="width:200px;" type="text" id="mail-from" name="mail_from" class="input-text"/>
+        </div>
+        <div class="field">
+            <label for="mail-to"><?php echo $this->__('To Name') ?>:</label><br/>
+            <input style="width:200px;" type="text" id="mail-to" name="mail_to" class="input-text"/>
+        </div>
+        <?php if ($this->getCardType() == 'email'): ?>
+            <div class="field">
+                <label for="mail-to-email" class="required"><?php echo $this->__('To E-mail') ?><em>*</em>:</label><br/>
+                <input style="width:200px;" type="text" id="mail-to-email" name="mail_to_email" class="input-text required-entry validate-email"/>
+            </div>
+        <?php endif; ?>
+        <div class="field">
+            <label for="mail-message"><?php echo $this->__('Message') ?>:</label><br/>
+            <textarea id="mail-message" name="mail_message"></textarea>
+        </div>
+
+        <?php if($this->getCardType() == 'email' && Mage::getStoreConfig('giftcards/default/show_mail_delivery_date_field')): ?>
+        <!--delivery date-->
+            <div class="field">
+                <label for="mail_delivery_date" class=""><?php echo $this->__('Mail Delivery Date'); ?></label><br />
+                <input type="text" id="mail_delivery_date" name="mail_delivery_date" value="" title="<?php echo $this->__('Mail Delivery Date'); ?>" class="validate-date input-text"/>
+                <img src="<?php echo Mage::getDesign()->getSkinUrl('images/grid-cal.gif'); ?>" alt="" class="v-middle" id="mail_delivery_date_button" title="<?php echo $this->__('Mail Delivery Date'); ?>"/>
+            </div>
+            <!--<br/>
+            <a href="#" onclick="preview();"> Preview my gift card. </a>-->
+            <?php $this->getChildHtml('calendar'); ?>
+            <script type="text/javascript">
+                Calendar.setup({
+                    inputField : "mail_delivery_date",
+                    ifFormat : "%m/%d/%Y",
+                    button : "mail_delivery_date_button",
+                    align : "Bl",
+                    singleClick : true
+                });
+            </script>
+        <!--end delivery date-->
+        <?php endif; ?>
+        <?php if($this->getCardType() == 'email'): ?>
+        <!--Preview-->
+        <br/>
+        <a href="#" onclick="preview();"> <?php echo $this->__('Preview my gift card'); ?>. </a>
+        <script type="text/javascript">
+            function preview() {
+                var product = <?php echo $_product->getId() ?>;
+                var price = getCardPrice();
+                var mailFrom = $('mail-from').value;
+                var mailTo = $('mail-to').value;
+                var mailMessage = $('mail-message').value;
+                var cardType = '<?php echo $this->getCardType(); ?>';
+                var url = '<?php echo $this->getUrl('giftcards/preview/preview'); ?>';
+                url = url.substring(0, url.length -1);
+                url += '?mail-from=' + mailFrom + '&mail-to=' + mailTo + '&mail-message=' + mailMessage+'&price='+price+'&card-type='+cardType+'&product='+product;
+                window.open(url, '_blank');
+            }
+
+            function getCardPrice()
+            {
+                var price = $$('div.price-box span.regular-price span.price');
+                if(price[0]) {
+                    price = price[0].innerHTML;
+                    price = price.slice(1);
+                } else {
+                    price = $('card-amount').value;
+                }
+                return price;
+            }
+        </script>
+        <!--end preview-->
+        <?php endif; ?>
+    </fieldset>
+</div>
+
